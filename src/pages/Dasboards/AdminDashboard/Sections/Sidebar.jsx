@@ -1,5 +1,3 @@
-// Sidebar.jsx
-
 import React from "react";
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
@@ -13,26 +11,80 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
   ];
 
   return (
-    <aside className="h-full w-full bg-green-700 text-white flex flex-col p-6">
-      <h2 className="text-2xl font-bold mb-6 text-center border-b border-green-500 pb-3">
-        🌱 Admin Menu
+    <aside
+      className="
+        h-full w-75
+        bg-gradient-to-b from-emerald-900 via-emerald-800 to-emerald-700
+        text-white
+        flex flex-col
+        px-6 py-8
+        shadow-2xl
+      "
+    >
+      {/* Header */}
+      <h2
+        className="
+          text-xl font-semibold
+          tracking-wide
+          mb-8
+          text-center
+          border-b border-emerald-600
+          pb-4
+        "
+      >
+        🛠Admin Panel
       </h2>
 
-      <div className="flex flex-col gap-2">
-        {menu.map((item) => (
-          <button
-            key={item.key}
-            onClick={() => setActiveTab(item.key)}
-            className={`text-left px-4 py-2 rounded-lg transition-all duration-200
-              ${
-                activeTab === item.key
-                  ? "bg-green-500 shadow-md"
-                  : "hover:bg-green-600"
-              }`}
-          >
-            {item.name}
-          </button>
-        ))}
+      {/* Menu */}
+      <div className="flex flex-col gap-3">
+        {menu.map((item) => {
+          const isActive = activeTab === item.key;
+
+          return (
+            <button
+              key={item.key}
+              onClick={() => setActiveTab(item.key)}
+              className={`
+                relative w-full text-left
+                px-4 py-3
+                rounded-lg
+                text-sm font-medium
+                transition-all duration-200
+                ${
+                  isActive
+                    ? `
+                      bg-white text-emerald-900
+                      shadow-md
+                    `
+                    : `
+                      text-emerald-100
+                      hover:bg-emerald-700
+                      hover:text-white
+                    `
+                }
+              `}
+            >
+              {item.name}
+
+              {/* Active Accent Bar */}
+              {isActive && (
+                <span className="absolute left-0 top-0 h-full w-1 bg-white rounded-r-md" />
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Footer */}
+      <div
+        className="
+          mt-auto pt-8
+          text-xs text-emerald-200/60
+          text-center
+          border-t border-emerald-600
+        "
+      >
+        SYSTEM CONTROL • SECURE
       </div>
     </aside>
   );

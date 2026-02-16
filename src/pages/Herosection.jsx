@@ -5,10 +5,26 @@ import { Leaf, Sun, Droplets } from "lucide-react";
 import Navbar from "./Navbar";
 import AboutSection from "./AboutSection";
 import ServicesSection from "./ServicesSection";
+import { motion } from "framer-motion";
+
+const container = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren:0.42
+    }
+  }
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 50 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
+};
 
 function HeroSection() {
   return (
     <div className="overflow-x-hidden">
+
       <section
         id="home"
         className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-linear-to-b from-green-50 to-emerald-100"
@@ -17,120 +33,130 @@ function HeroSection() {
           <Navbar />
         </div>
 
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-earth-gradient" />
-        <div className="absolute inset-0 opacity-5">
+        {/* Background blobs — slow floating */}
+        <motion.div
+          className="absolute inset-0 opacity-5"
+          animate={{ y: [0, -20, 0] }}
+          transition={{ duration: 12, repeat: Infinity }}
+        >
           <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-primary blur-3xl" />
           <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-leaf-green blur-3xl" />
-        </div>
+        </motion.div>
 
-        {/* Floating Elements */}
-        <div className="absolute top-32 left-[15%] animate-float opacity-20">
+        {/* Floating Icons */}
+        <motion.div
+          className="absolute top-32 left-[15%] opacity-20"
+          animate={{ y: [0, -15, 0] }}
+          transition={{ duration: 6, repeat: Infinity }}
+        >
           <Leaf className="w-16 h-16 text-primary" />
-        </div>
-        <div
-          className="absolute top-48 right-[20%] animate-float opacity-20"
-          style={{ animationDelay: "2s" }}
+        </motion.div>
+
+        <motion.div
+          className="absolute top-48 right-[20%] opacity-20"
+          animate={{ y: [0, -18, 0] }}
+          transition={{ duration: 7, repeat: Infinity }}
         >
           <Sun className="w-12 h-12 text-wheat-gold" />
-        </div>
-        <div
-          className="absolute bottom-32 left-[25%] animate-float opacity-20"
-          style={{ animationDelay: "4s" }}
+        </motion.div>
+
+        <motion.div
+          className="absolute bottom-32 left-[25%] opacity-20"
+          animate={{ y: [0, -12, 0] }}
+          transition={{ duration: 8, repeat: Infinity }}
         >
           <Droplets className="w-10 h-10 text-sky-blue" />
-        </div>
+        </motion.div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="max-w-4xl mx-auto text-center"
+          >
+
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/60 border border-primary/20 mb-6 animate-fade-up">
+            <motion.div
+              variants={fadeUp}
+              whileHover={{ scale: 1.05 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/60 border border-primary/20 mb-6"
+            >
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               <span className="text-sm font-medium text-muted-foreground">
                 Empowering Farmers Across India
               </span>
-            </div>
+            </motion.div>
 
-            {/* Main Heading */}
-            <h1
-              className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 animate-fade-up"
-              style={{ animationDelay: "0.1s" }}
+            {/* Heading */}
+            <motion.h1
+              variants={fadeUp}
+              className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6"
             >
               Start Farming <span className="text-gradient">Smarter</span>
               <br />
               Today
-            </h1>
+            </motion.h1>
 
-            {/* Subheading */}
-            <p
-              className="font-body text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-up"
-              style={{ animationDelay: "0.2s" }}
+            {/* Subtext */}
+            <motion.p
+              variants={fadeUp}
+              className="font-body text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
             >
               Connect with agricultural experts, access quality seeds, transport
               your harvest, and grow your farming business with our
               comprehensive platform.
-            </p>
+            </motion.p>
 
-            {/* CTA Buttons */}
-            <div
-              className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up"
-              style={{ animationDelay: "0.3s" }}
+            {/* CTA */}
+            <motion.div
+              variants={fadeUp}
+              className="flex flex-col sm:flex-row gap-4 justify-center"
             >
-              <Link
-                to="/loginselection"
-                className="px-6 py-3 bg-green-700 hover:bg-green-800 text-white text-lg font-semibold rounded-xl shadow-md transition-all"
-              >
-                🌱 Start Farming Smarter
-              </Link>
+              <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.96 }}>
+                <Link
+                  to="/loginselection"
+                  className="px-6 py-3 bg-green-700 hover:bg-green-800 text-white text-lg font-semibold rounded-xl shadow-md transition-all inline-block"
+                >
+                  🌱 Start Farming Smarter
+                </Link>
+              </motion.div>
 
-              <Button variant="outline" size="lg">
-                Learn More
-              </Button>
-            </div>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Button variant="outline" size="lg">
+                  Learn More
+                </Button>
+              </motion.div>
+            </motion.div>
 
-            {/* User Roles */}
-            <div
-              className="mt-8 animate-fade-up"
-              style={{ animationDelay: "0.4s" }}
-            >
+            {/* Roles */}
+            <motion.div variants={fadeUp} className="mt-8">
               <p className="text-sm text-muted-foreground mb-4">Join as</p>
+
               <div className="flex flex-wrap justify-center gap-4">
-                {["Farmer", "Customer", "Doctor", "Admin"].map((role) => (
-                  <span
+                {["Farmer", "Customer", "Doctor", "Admin"].map((role, i) => (
+                  <motion.span
                     key={role}
-                    className="px-4 py-2 rounded-full bg-card border border-border text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors cursor-pointer"
+                    initial={{ opacity: 0, scale: 0.7 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.6 + i * 0.1 }}
+                    whileHover={{ scale: 1.1, y: -3 }}
+                    className="px-4 py-2 rounded-full bg-card border border-border text-sm font-medium cursor-pointer hover:border-primary hover:text-primary"
                   >
                     {role}
-                  </span>
+                  </motion.span>
                 ))}
               </div>
-            </div>
-          </div>
-        </div>
+            </motion.div>
 
-        {/* Bottom Wave */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg
-            viewBox="0 0 1440 120"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-full"
-          >
-            <path
-              d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z"
-              fill="hsl(var(--card))"
-            />
-          </svg>
+          </motion.div>
         </div>
       </section>
-
-      {/* aboutsection */}
 
       <section id="aboutsection">
         <AboutSection />
       </section>
 
-      {/* services section */}
       <section id="servicesSection">
         <ServicesSection />
       </section>

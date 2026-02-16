@@ -35,7 +35,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Smooth scroll + close mobile
   const handleNavClick = (href) => {
     setMobileMenuOpen(false);
 
@@ -53,11 +52,11 @@ const Navbar = () => {
         showNavbar ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      <nav className="backdrop-blur-md bg-linear-to-r from-emerald-100/80 to-green-100 border-b border-emerald-200">
+      <nav className="backdrop-blur-md bg-gradient-to-r from-emerald-100/80 to-green-100 border-b border-emerald-200 shadow-sm">
         <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
 
           {/* Logo */}
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center hover:scale-105 transition">
             <img
               src={Logo}
               alt="Kisan Mitra Logo"
@@ -69,21 +68,21 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-8 text-[17px] font-medium text-emerald-900">
             <a
               href="/"
-              className="hover:text-green-700 transition"
+              className="hover:text-green-700 transition duration-200"
               onClick={() => handleNavClick("/")}
             >
               Home
             </a>
             <a
               href="#aboutsection"
-              className="hover:text-green-700 transition"
+              className="hover:text-green-700 transition duration-200"
               onClick={() => handleNavClick("#aboutsection")}
             >
               About
             </a>
             <a
               href="#servicesSection"
-              className="hover:text-green-700 transition"
+              className="hover:text-green-700 transition duration-200"
               onClick={() => handleNavClick("#servicesSection")}
             >
               Services
@@ -92,12 +91,13 @@ const Navbar = () => {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-4">
+            {/* Login Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   className="
                     rounded-full 
-                    bg-linear-to-r from-green-600 to-emerald-600 
+                    bg-gradient-to-r from-green-600 to-emerald-600 
                     px-6 
                     text-white 
                     shadow-lg 
@@ -130,12 +130,26 @@ const Navbar = () => {
 
                 <DropdownMenuItem
                   className="rounded-lg px-3 py-2 cursor-pointer hover:bg-green-50"
-                  onClick={() => navigate("/admin-login")}
+                  onClick={() => navigate("/login")}
                 >
                   🛠 Admin Login
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+              <Button
+              onClick={() => navigate("/register")}
+              className="
+                rounded-full
+                px-6
+                border border-green-600
+                text-green-700
+                bg-white
+                hover:bg-green-500 text-white-500
+                transition-all
+              "
+            >
+              Register
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -149,7 +163,7 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-emerald-200 px-6 py-4 space-y-4 text-emerald-900 font-medium">
+          <div className="md:hidden bg-white border-t border-emerald-200 px-6 py-4 space-y-4 text-emerald-900 font-medium animate-fadeIn">
             <a
               href="/"
               onClick={() => handleNavClick("/")}
@@ -180,6 +194,16 @@ const Navbar = () => {
               className="w-full rounded-full bg-green-600 hover:bg-green-700 text-white"
             >
               Login
+            </Button>
+
+            <Button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                navigate("/register");
+              }}
+              className="w-full rounded-full bg-white border border-green-600 text-green-700 hover:bg-green-50"
+            >
+              Register
             </Button>
           </div>
         )}
