@@ -2,7 +2,7 @@ import Spinner from "@/components/ui/spinner";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import HeroSection from "./pages/Herosection";
-import Footer from "./pages/footer";
+import Footer from "./pages/Footer";
 
 function App() {
   const [loading, setLoading] = useState(true);
