@@ -117,6 +117,7 @@ const AppointmentRequests = () => {
               farmerName={request.farmerName}
               issue={request.issue}
               imageIds={request.imageIds}
+                audioId={request.audioId} 
               onAccept={() => updateAppointmentStatus(request.$id, "accepted")}
               onReject={() => updateAppointmentStatus(request.$id, "rejected")}
             />
