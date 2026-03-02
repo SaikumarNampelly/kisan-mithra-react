@@ -7,8 +7,15 @@ const ScheduledCard = ({
   issue,
   appointmentDate,
   imageIds = [],
+  audioId = null,
   onChat,
 }) => {
+    const audioUrl = audioId
+    ? AppwriteStorage.getFileView(
+        APPWRITE_KISAN_MITRA_IMAGES_BUCKET_ID,
+        audioId
+      )
+    : null;
   return (
     <div className="mt-4 p-4 border rounded-xl bg-white shadow-sm hover:shadow-md transition">
       {/* Header */}
@@ -26,7 +33,7 @@ const ScheduledCard = ({
       </div>
 
       {/* Issue */}
-      <p className="mt-2 text-gray-700">
+      <p>
         <strong>Issue:</strong> {issue}
       </p>
 
@@ -43,9 +50,10 @@ const ScheduledCard = ({
               alt="Crop issue"
               className="h-20 w-20 object-cover rounded-lg border"
             />
-          ))}
+          ))} 
         </div>
       )}
+
 
       {/* Footer */}
       <div className="mt-4 flex items-center justify-between">

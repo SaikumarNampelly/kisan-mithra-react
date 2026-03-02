@@ -1,7 +1,23 @@
 import AppwriteStorage from "@/src/Appwrite/Storage.Services";
-import { APPWRITE_KISAN_MITRA_IMAGES_BUCKET_ID} from "../Utils/Appwrite/constants";
+import { APPWRITE_KISAN_MITRA_IMAGES_BUCKET_ID } from "../Utils/Appwrite/constants";
 
-const RequestCard = ({ farmerId, farmerName, issue, imageIds, onAccept, onReject }) => {
+const RequestCard = ({
+  farmerId,
+  farmerName,
+  issue,
+  imageIds,
+  audioId,
+  onAccept,
+  onReject,
+}) => {
+
+const audioUrl = audioId
+  ? AppwriteStorage.getFileView(
+      APPWRITE_KISAN_MITRA_IMAGES_BUCKET_ID,
+      audioId
+    )
+  : null;
+
   return (
     <div className="mt-4 p-4 border rounded-lg bg-gray-50">
       <p>
@@ -24,12 +40,22 @@ const RequestCard = ({ farmerId, farmerName, issue, imageIds, onAccept, onReject
               key={fileId}
               src={AppwriteStorage.getFileView(
                 APPWRITE_KISAN_MITRA_IMAGES_BUCKET_ID,
-                fileId,
+                fileId
               )}
               alt="Crop issue"
               className="h-24 w-full object-cover rounded"
             />
           ))}
+        </div>
+      )}
+
+      {/* 🎤 Audio */}
+      {audioId && (
+        <div className="mt-4">
+          <p className="text-sm font-medium mb-1">
+            🎤 Farmer Voice Message:
+          </p>
+          <audio controls src={audioUrl} className="w-full" />
         </div>
       )}
 

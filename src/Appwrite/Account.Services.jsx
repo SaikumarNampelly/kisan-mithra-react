@@ -64,8 +64,6 @@ async createPasswordRecovery(email, redirectUrl) {
 async updatePasswordRecovery(userId, secret, password) {
   return await this.account.updateRecovery(userId, secret, password);
 }
-
-
   // ✅ Logout
   async logout() {
     try {

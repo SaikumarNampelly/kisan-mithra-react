@@ -64,6 +64,7 @@ const MyAppointments = () => {
             issue={appointment.issue}
             appointmentDate={appointment.appointmentDate}
             imageIds={appointment.imageIds}
+              audioId={appointment.audioId} 
             onChat={() => setActiveChatUserId(appointment.farmerId)}
           />
         ))

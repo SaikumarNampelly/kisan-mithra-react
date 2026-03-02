@@ -29,22 +29,22 @@ function LogInPage() {
     navigate("/loginSelection");
   }
   async function handleForgotPassword() {
-  if (!email) {
-    toast.error("Enter your email first");
-    return;
-  }
+    if (!email) {
+      toast.error("Enter your email first");
+      return;
+    }
 
-  try {
-    await appwriteAccount.createPasswordRecovery(
-      email,
-      "http://localhost:5173/reset-password"
-    );
+    try {
+      await appwriteAccount.createPasswordRecovery(
+        email,
+        `${window.location.origin}/reset-password`
+      );
 
-    toast.success("Password recovery email sent 📩");
-  } catch (error) {
-    toast.error("Failed to send recovery email");
+      toast.success("Password recovery email sent 📩");
+    } catch (error) {
+      toast.error("Failed to send recovery email");
+    }
   }
-}
 
   const mutation = useMutation({
     mutationFn: async ({ email, password }) => {
@@ -62,26 +62,26 @@ function LogInPage() {
       return user;
     },
     onSuccess: (user) => {
-  setCurrentUser(user);
+      setCurrentUser(user);
 
-  const userRole = user?.prefs?.role;
+      const userRole = user?.prefs?.role;
 
-  setTimeout(() => {
-    if (userRole === "FARMER") navigate("/farmer");
-    else if (userRole === "AGRI_EXPERT") navigate("/doctor");
-    else if (userRole === "CUSTOMER") navigate("/customer");
-    else if (userRole === "ADMIN") navigate("/admin");
-    else toast.error("Role missing");
-  }, 0);
+      setTimeout(() => {
+        if (userRole === "FARMER") navigate("/farmer");
+        else if (userRole === "AGRI_EXPERT") navigate("/doctor");
+        else if (userRole === "CUSTOMER") navigate("/customer");
+        else if (userRole === "ADMIN") navigate("/admin");
+        else toast.error("Role missing");
+      }, 0);
 
-  toast.success("Welcome back! You’re now logged in.", {
-    icon: "👏",
-  });
-},
+      toast.success("Welcome back! You’re now logged in.", {
+        icon: "👏",
+      });
+    },
 
     onError: (error) => {
       console.error("Login failed:", error);
-      toast.error(error.message|| "Login failed — invalid email or password");
+      toast.error(error.message || "Login failed — invalid email or password");
     },
   });
 
@@ -151,14 +151,14 @@ function LogInPage() {
               />
             </div>
             <div className="text-right">
-  <button
-    type="button"
-    onClick={() => handleForgotPassword()}
-    className="text-sm text-emerald-600 hover:underline"
-  >
-    Forgot Password?
-  </button>
-</div>
+              <button
+                type="button"
+                onClick={() => handleForgotPassword()}
+                className="text-sm text-emerald-600 hover:underline"
+              >
+                Forgot Password?
+              </button>
+            </div>
 
           </div>
         </CardContent>
