@@ -1,5 +1,5 @@
-export default async ({ req, res }) => {
-  console.log("🔥 TRANSCRIBE FUNCTION IS RUNNING");
+module.exports = async function (req, res) {
+  console.log("🔥 FUNCTION EXECUTED");
 
   res.json({
     success: true,
