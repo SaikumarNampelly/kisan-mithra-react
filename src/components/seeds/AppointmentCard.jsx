@@ -77,14 +77,14 @@ const AppointmentCard = ({ doctorId, onClose }) => {
       );
 
       console.log("Execution object:", execution);
-console.log("Raw responseBody:", execution.responseBody);
+      console.log("Raw responseBody:", execution.responseBody);
 
-if (!execution.responseBody) {
-  toast.error("Empty response from function ❌");
-  return;
-}
+      if (!execution.responseBody) {
+        toast.error("Empty response from function ❌");
+        return;
+      }
 
-const result = JSON.parse(execution.responseBody);
+      const result = JSON.parse(execution.responseBody);
 
       if (result.success) {
         setIssue(result.transcriptEnglish);
@@ -158,9 +158,7 @@ const result = JSON.parse(execution.responseBody);
 
   return (
     <div className="mt-10 max-w-2xl mx-auto p-6 bg-white rounded-xl shadow">
-      <h2 className="text-2xl font-semibold mb-6">
-        Book Doctor Appointment
-      </h2>
+      <h2 className="text-2xl font-semibold mb-6">Book Doctor Appointment</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <textarea
@@ -207,9 +205,7 @@ const result = JSON.parse(execution.responseBody);
           )}
 
           {converting && (
-            <p className="text-yellow-600 text-sm">
-              Converting voice...
-            </p>
+            <p className="text-yellow-600 text-sm">Converting voice...</p>
           )}
         </div>
 

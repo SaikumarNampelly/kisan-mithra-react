@@ -1,5 +1,5 @@
 module.exports = async function (req, res) {
-  console.log("🔥 FUNCTION EXECUTED");
+  console.log("🔥 FUNCTION IS RUNNING");
 
   res.json({
     success: true,
