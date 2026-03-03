@@ -1,18 +1,20 @@
 import fetch from "node-fetch";
 
-export default async function (req, res) {
+export default async ({ req, res }) => {
   try {
     const body = JSON.parse(req.body || "{}");
     const { audioBase64 } = body;
 
     if (!audioBase64) {
-      return res.json({ success: false, error: "No audio provided" });
+      res.json({ success: false, error: "No audio provided" });
+      return;
     }
 
     const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
     if (!GEMINI_API_KEY) {
-      return res.json({ success: false, error: "Missing API key" });
+      res.json({ success: false, error: "Missing API key" });
+      return;
     }
 
     const response = await fetch(
@@ -46,21 +48,25 @@ export default async function (req, res) {
       geminiData?.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!transcript) {
-      return res.json({
+      res.json({
         success: false,
         error: "Transcript not found",
         raw: geminiData,
       });
+      return;
     }
 
-    return res.json({
+    res.json({
       success: true,
       transcriptEnglish: transcript,
     });
+    return;
+
   } catch (err) {
-    return res.json({
+    res.json({
       success: false,
       error: err.message,
     });
+    return;
   }
-}
+};
