@@ -33,15 +33,14 @@ const AppointmentCard = ({ doctorId, onClose }) => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-      const options = { mimeType: "audio/webm" };
-      mediaRecorderRef.current = new MediaRecorder(stream, options);
+      mediaRecorderRef.current = new MediaRecorder(stream);
 
       mediaRecorderRef.current.ondataavailable = (event) => {
         audioChunks.current.push(event.data);
       };
 
       mediaRecorderRef.current.onstop = async () => {
-        const blob = new Blob(audioChunks.current, { type: "audio/webm" });
+        const blob = new Blob(audioChunks.current, { type: "audio/wav" });
         audioChunks.current = [];
         setAudioBlob(blob);
 
@@ -56,15 +55,10 @@ const AppointmentCard = ({ doctorId, onClose }) => {
   };
 
   const stopRecording = () => {
-    if (
-      mediaRecorderRef.current &&
-      mediaRecorderRef.current.state !== "inactive"
-    ) {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
       mediaRecorderRef.current.stop();
       // Stop all tracks to release the microphone
-      mediaRecorderRef.current.stream
-        .getTracks()
-        .forEach((track) => track.stop());
+      mediaRecorderRef.current.stream.getTracks().forEach((track) => track.stop());
     }
     setRecording(false);
   };
@@ -90,8 +84,6 @@ const AppointmentCard = ({ doctorId, onClose }) => {
       console.log("Execution object:", execution);
       console.log("Execution status:", execution.status);
       console.log("Raw responseBody:", execution.responseBody);
-      console.log("Logs:", execution.logs);
-      console.log("Errors:", execution.errors);
 
       if (!execution.responseBody) {
         toast.error("Empty response from function ❌");
