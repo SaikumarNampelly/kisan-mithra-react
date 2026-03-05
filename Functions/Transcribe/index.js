@@ -1,35 +1,59 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-module.exports = async ({ req, res, log, error }) => {
+export default async ({ req, res, log, error }) => {
   try {
     log("Function started");
 
-    const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+    let body;
+    if (typeof req.body === "string") {
+      try {
+        body = JSON.parse(req.body);
+      } catch (parseErr) {
+        log("Failed to parse body: " + parseErr.message);
+        return res.send(
+          JSON.stringify({ success: false, error: "Invalid JSON body" }),
+          200,
+          { "Content-Type": "application/json" }
+        );
+      }
+    } else {
+      body = req.body;
+    }
 
-    if (!body.audioBase64) {
-      return res.json({ success: false, error: "audioBase64 missing" });
+    if (!body || !body.audioBase64) {
+      log("audioBase64 missing from request");
+      return res.send(
+        JSON.stringify({ success: false, error: "audioBase64 missing" }),
+        200,
+        { "Content-Type": "application/json" }
+      );
     }
 
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      error("GEMINI_API_KEY missing");
-      return res.json({ success: false, error: "API key missing" });
+      error("GEMINI_API_KEY environment variable is not set");
+      return res.send(
+        JSON.stringify({ success: false, error: "API key not configured" }),
+        200,
+        { "Content-Type": "application/json" }
+      );
     }
 
+    log("Initializing Gemini AI");
     const genAI = new GoogleGenerativeAI(apiKey);
 
     const model = genAI.getGenerativeModel({
       model: "gemini-1.5-flash"
     });
 
-    log("Sending audio to Gemini");
+    log("Sending audio to Gemini for transcription");
 
     const result = await model.generateContent([
       "Transcribe this audio to English",
       {
         inlineData: {
-          mimeType: "audio/wav",
+          mimeType: "audio/webm",
           data: body.audioBase64
         }
       }
@@ -37,19 +61,28 @@ module.exports = async ({ req, res, log, error }) => {
 
     const text = result.response.text();
 
-    log("Transcript: " + text);
+    log("Transcription successful: " + text.substring(0, 50));
 
-    return res.json({
-      success: true,
-      transcriptEnglish: text
-    });
+    return res.send(
+      JSON.stringify({
+        success: true,
+        transcriptEnglish: text
+      }),
+      200,
+      { "Content-Type": "application/json" }
+    );
 
   } catch (err) {
-    error("Function crash: " + err.message);
+    error("Function error: " + err.message);
+    error("Stack: " + err.stack);
 
-    return res.json({
-      success: false,
-      error: err.message
-    });
+    return res.send(
+      JSON.stringify({
+        success: false,
+        error: err.message || "Unknown error occurred"
+      }),
+      200,
+      { "Content-Type": "application/json" }
+    );
   }
 };

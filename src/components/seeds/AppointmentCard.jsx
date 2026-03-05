@@ -33,14 +33,15 @@ const AppointmentCard = ({ doctorId, onClose }) => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-      mediaRecorderRef.current = new MediaRecorder(stream);
+      const options = { mimeType: "audio/webm" };
+      mediaRecorderRef.current = new MediaRecorder(stream, options);
 
       mediaRecorderRef.current.ondataavailable = (event) => {
         audioChunks.current.push(event.data);
       };
 
       mediaRecorderRef.current.onstop = async () => {
-        const blob = new Blob(audioChunks.current, { type: "audio/wav" });
+        const blob = new Blob(audioChunks.current, { type: "audio/webm" });
         audioChunks.current = [];
         setAudioBlob(blob);
 
