@@ -55,7 +55,16 @@ const AppointmentCard = ({ doctorId, onClose }) => {
   };
 
   const stopRecording = () => {
-    mediaRecorderRef.current?.stop();
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state !== "inactive"
+    ) {
+      mediaRecorderRef.current.stop();
+      // Stop all tracks to release the microphone
+      mediaRecorderRef.current.stream
+        .getTracks()
+        .forEach((track) => track.stop());
+    }
     setRecording(false);
   };
 
@@ -73,11 +82,15 @@ const AppointmentCard = ({ doctorId, onClose }) => {
 
       const execution = await functions.createExecution(
         APPWRITE_VOICE_FUNCTION_ID,
-        JSON.stringify({ audioBase64: base64String })
+        JSON.stringify({ audioBase64: base64String }),
+        false // ✅ Set async to false to wait for the response
       );
 
       console.log("Execution object:", execution);
+      console.log("Execution status:", execution.status);
       console.log("Raw responseBody:", execution.responseBody);
+      console.log("Logs:", execution.logs);
+      console.log("Errors:", execution.errors);
 
       if (!execution.responseBody) {
         toast.error("Empty response from function ❌");
@@ -86,11 +99,11 @@ const AppointmentCard = ({ doctorId, onClose }) => {
 
       const result = JSON.parse(execution.responseBody);
 
-      if (result.success) {
+      if (result.success && result.transcriptEnglish) {
         setIssue(result.transcriptEnglish);
         toast.success("Voice converted to text ✅");
       } else {
-        toast.error(result.error || "Voice conversion failed ❌");
+        toast.error(result.error || "Voice conversion returned no text ❌");
       }
     } catch (err) {
       console.error(err);
